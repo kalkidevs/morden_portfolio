@@ -111,16 +111,112 @@
                 transform: translateX(-50%);
             }
         }
+
+        /* Coffee Button Pulse */
+        @keyframes subtle-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 0 10px rgba(250, 204, 21, 0);
+            }
+        }
+
+        .coffee-pulse {
+            animation: subtle-pulse 3s infinite;
+        }
+
+        /* Easter Egg: Emoji Rain */
+        .emoji-rain {
+            position: fixed;
+            top: -50px;
+            font-size: 24px;
+            z-index: 9999;
+            animation: fall linear forwards;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(720deg);
+            }
+        }
+
+        /* Terminal Overlay */
+        #terminal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .terminal-box {
+            width: 80%;
+            max-width: 600px;
+            background: #1e293b;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .typing-cursor::after {
+            content: '▋';
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Cursor Particle */
+        .cursor-particle {
+            position: fixed;
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: 9998;
+            animation: fade-out 1s forwards;
+        }
+
+        @keyframes fade-out {
+            to {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.5);
+            }
+        }
     </style>
 </head>
 
 <body class="antialiased selection:bg-blue-500 selection:text-white">
 
+    <!-- Terminal Overlay for Easter Egg -->
+    <div id="terminal-overlay">
+        <div class="terminal-box">
+            <div class="flex gap-2 mb-4 border-b border-gray-700 pb-2">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+            </div>
+            <div id="terminal-content" class="text-green-400 text-sm space-y-1"></div>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="fixed w-full z-50 glass top-0 left-0">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <div onclick="switchView('home')"
-                class="text-2xl font-bold tracking-tighter cursor-pointer hover:opacity-80 transition">
+            <!-- Easter Egg Trigger: Click this 5 times -->
+            <div id="logo-trigger"
+                class="text-2xl font-bold tracking-tighter cursor-pointer hover:opacity-80 transition select-none">
                 YK<span class="text-blue-400">.</span>
             </div>
 
@@ -129,7 +225,6 @@
                 <button onclick="switchView('home')" class="hover:text-white transition">Home</button>
                 <button onclick="switchView('projects')" class="hover:text-white transition">Projects</button>
                 <button onclick="switchView('resume')" class="hover:text-white transition text-blue-400">Resume</button>
-                <!-- Updated -->
                 <a href="#contact" class="hover:text-white transition">Contact</a>
 
                 <a href="path/to/Yash_Kushwaha_Resume.pdf" target="_blank"
@@ -144,6 +239,13 @@
             </button>
         </div>
     </nav>
+
+    <!-- Buy Me A Coffee Button (Fixed) -->
+    <a href="https://buymeacoffee.com/kalkidevs" target="_blank"
+        class="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-5 py-3 bg-[#FFDD00] hover:bg-[#ffea00] text-slate-900 rounded-full font-bold shadow-lg shadow-yellow-400/20 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group coffee-pulse">
+        <i data-lucide="coffee" class="w-5 h-5 fill-slate-900"></i>
+        <span class="font-bold">Buy me a coffee</span>
+    </a>
 
     <!-- MAIN CONTENT CONTAINER -->
     <main id="app-container">
@@ -440,14 +542,7 @@
                                 Yashkushwaha65@gmail.com</span>
                         </div>
                     </div>
-                    <div class="mt-6 md:mt-0">
-                        <a href="path/to/Yash_Kushwaha_Resume.pdf" target="_blank"
-                            class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold transition flex items-center gap-2 shadow-lg shadow-blue-500/20">
-                            <i data-lucide="download" class="w-5 h-5"></i> Download PDF
-                        </a>
-                    </div>
                 </div>
-
                 <!-- Professional Summary -->
                 <section class="mb-16 resume-anim opacity-0 translate-y-4">
                     <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
@@ -596,6 +691,45 @@
                         </div>
                     </div>
                 </section>
+                <!-- Extra Activities Section (NEW) -->
+                <section class="mb-16 resume-anim opacity-0 translate-y-4">
+                    <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-2">
+                        <span class="w-8 h-1 bg-blue-500 rounded-full"></span> Extra Activities
+                    </h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Activity 1 -->
+                        <div
+                            class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 hover:border-yellow-500/50 transition duration-300">
+                            <div class="flex items-start gap-4">
+                                <div class="bg-yellow-500/20 p-3 rounded-lg text-yellow-500">
+                                    <i data-lucide="video" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">Content Creation</h3>
+                                    <p class="text-sm text-gray-400 mt-1">Active content creator for <span
+                                            class="text-yellow-500">Clash Royale</span>, building a community around
+                                        gaming strategies and digital engagement. Developed skills in video editing and
+                                        audience analytics.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Activity 2 -->
+                        <div
+                            class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 hover:border-purple-500/50 transition duration-300">
+                            <div class="flex items-start gap-4">
+                                <div class="bg-purple-500/20 p-3 rounded-lg text-purple-500">
+                                    <i data-lucide="code-2" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">Problem Solving</h3>
+                                    <p class="text-sm text-gray-400 mt-1">Solved <span class="text-purple-500">150+ DSA
+                                            problems</span> on GeeksForGeeks using Python, Java, and C++. Consistent
+                                        participant in coding contests to sharpen algorithmic thinking.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
                 <!-- Education & Certs -->
                 <section class="grid md:grid-cols-2 gap-8 resume-anim opacity-0 translate-y-4">
@@ -630,17 +764,33 @@
                                 </div>
                             </li>
                             <li class="flex items-start gap-3">
-                                <i data-lucide="users" class="w-5 h-5 text-blue-500 mt-1"></i>
+                                <i data-lucide="award" class="w-5 h-5 text-emerald-500 mt-1"></i>
                                 <div>
-                                    <h4 class="font-bold text-white">Clash Royale Creator</h4>
-                                    <p class="text-sm text-gray-400">Recognized content creator demonstrating community
-                                        building skills.</p>
+                                    <h4 class="font-bold text-white">Android Development</h4>
+                                    <p class="text-sm text-gray-400">Google Developer Badge for Android Development with
+                                        Kotlin.</p>
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </section>
 
+            </div>
+            <!-- DEDICATED DOWNLOAD SECTION (NEW) -->
+            <div class="resume-anim opacity-0 translate-y-4 mb-16">
+                <div
+                    class="bg-gradient-to-r from-blue-900/40 to-slate-900/40 border border-blue-500/30 rounded-2xl p-8 text-center relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-blue-500/5 group-hover:bg-blue-500/10 transition duration-500">
+                    </div>
+                    <i data-lucide="file-text" class="w-12 h-12 text-blue-400 mx-auto mb-4"></i>
+                    <h3 class="text-2xl font-bold text-white mb-2">Looking for the full PDF?</h3>
+                    <p class="text-gray-400 mb-6 max-w-lg mx-auto">Download my complete resume to view detailed
+                        project breakdowns, additional certifications, and academic history.</p>
+                    <a href="path/to/Yash_Kushwaha_Resume.pdf" target="_blank"
+                        class="inline-flex items-center gap-2 px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-bold transition shadow-lg shadow-blue-500/25 hover:scale-105">
+                        <i data-lucide="download" class="w-5 h-5"></i> Download Resume.pdf
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -656,12 +806,18 @@
             </a>
 
             <div class="flex justify-center space-x-8 mt-12 mb-8">
-                <a href="#" class="text-gray-500 hover:text-white transition hover:-translate-y-1 transform"><i
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/in/yashkushwaha333/"
+                    class="text-gray-500 hover:text-white transition hover:-translate-y-1 transform"><i
                         data-lucide="linkedin"></i></a>
-                <a href="#" class="text-gray-500 hover:text-white transition hover:-translate-y-1 transform"><i
+                <!-- GitHub -->
+                <a href="https://github.com/kalkidevs"
+                    class="text-gray-500 hover:text-white transition hover:-translate-y-1 transform"><i
                         data-lucide="github"></i></a>
-                <a href="#" class="text-gray-500 hover:text-white transition hover:-translate-y-1 transform"><i
-                        data-lucide="twitter"></i></a>
+                <!-- WhatsApp (Replaces Twitter) -->
+                <a href="https://wa.me/917990714432" target="_blank"
+                    class="text-gray-500 hover:text-green-400 transition hover:-translate-y-1 transform"><i
+                        data-lucide="message-circle"></i></a>
             </div>
 
             <p class="text-gray-600 text-sm">
@@ -674,6 +830,145 @@
     <script>
         // Initialize Icons
         lucide.createIcons();
+
+        // --- EASTER EGG LOGIC ---
+        let logoClicks = 0;
+        let isCoffeeMode = false;
+        const logoTrigger = document.getElementById('logo-trigger');
+        const terminalOverlay = document.getElementById('terminal-overlay');
+        const terminalContent = document.getElementById('terminal-content');
+
+        // Sound Effects (Web Audio API)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playClickSound() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.1);
+
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
+        }
+
+        function playSuccessSound() {
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+            osc.frequency.setValueAtTime(554, audioCtx.currentTime + 0.1);
+            osc.frequency.setValueAtTime(659, audioCtx.currentTime + 0.2);
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.3);
+
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.6);
+        }
+
+        logoTrigger.addEventListener('click', () => {
+            playClickSound();
+            logoClicks++;
+
+            // Visual feedback on click
+            gsap.fromTo(logoTrigger, { scale: 0.9 }, { scale: 1, duration: 0.1 });
+
+            if (logoClicks === 5) {
+                activateEasterEgg();
+                logoClicks = 0; // Reset
+            }
+        });
+
+        function typeText(text, element, speed = 30) {
+            return new Promise(resolve => {
+                let i = 0;
+                const interval = setInterval(() => {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    if (i > text.length - 1) {
+                        clearInterval(interval);
+                        element.innerHTML += "<br>";
+                        resolve();
+                    }
+                }, speed);
+            });
+        }
+
+        async function activateEasterEgg() {
+            if (isCoffeeMode) return;
+            isCoffeeMode = true;
+            playSuccessSound();
+
+            // Terminal Animation
+            terminalOverlay.style.display = 'flex';
+            terminalContent.innerHTML = '<span class="typing-cursor"></span>';
+
+            await typeText("> System Override Initiated...", terminalContent);
+            await typeText("> Injecting Caffeine.dll...", terminalContent);
+            await typeText("> Optimizing Developer Dopamine Levels...", terminalContent);
+            await typeText("> SUCCESS: Developer Mode ACTIVE", terminalContent);
+
+            setTimeout(() => {
+                terminalOverlay.style.display = 'none';
+                startCoffeeRain();
+                activateCoffeeCursor();
+
+                // Persistent Notification
+                const toast = document.createElement('div');
+                toast.className = 'fixed top-24 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-slate-900 px-6 py-3 rounded-full font-bold z-50 shadow-2xl animate-bounce border-2 border-yellow-300';
+                toast.innerHTML = '☕ HYPER-CAFFEINATED MODE ACTIVE ☕';
+                document.body.appendChild(toast);
+
+                // Add click ripple sound global listener
+                document.addEventListener('click', playClickSound);
+
+            }, 1000);
+        }
+
+        // Particle Cursor
+        function activateCoffeeCursor() {
+            document.addEventListener('mousemove', (e) => {
+                if (Math.random() > 0.8) { // Throttle particles
+                    const particle = document.createElement('div');
+                    particle.className = 'cursor-particle';
+                    particle.innerHTML = '✨'; // Sparkle
+                    particle.style.left = e.pageX + 'px';
+                    particle.style.top = e.pageY + 'px';
+                    particle.style.fontSize = Math.random() * 10 + 5 + 'px';
+                    document.body.appendChild(particle);
+
+                    setTimeout(() => particle.remove(), 1000);
+                }
+            });
+        }
+
+        function startCoffeeRain() {
+            const emojis = ['☕', '💻', '🚀', '⚡', '📱', '🦄', '🐛'];
+            setInterval(() => {
+                const emoji = document.createElement('div');
+                emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                emoji.classList.add('emoji-rain');
+                emoji.style.left = Math.random() * 100 + 'vw';
+                emoji.style.animationDuration = Math.random() * 2 + 3 + 's'; // Slower, more majestic fall
+                emoji.style.fontSize = Math.random() * 20 + 20 + 'px';
+                document.body.appendChild(emoji);
+
+                // Remove after animation to prevent memory leak
+                setTimeout(() => emoji.remove(), 5000);
+            }, 300); // Constant gentle rain
+        }
 
         // --- DATA ---
         const projects = [
