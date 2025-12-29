@@ -1,285 +1,907 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yash Kushwaha | Full-Stack Mobile Engineer</title>
-    
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- GSAP for Animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #e2e8f0; overflow-x: hidden; }
-        .mono { font-family: 'JetBrains Mono', monospace; }
-        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 4px; }
-        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+
         /* Glassmorphism */
         .glass {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        
+
         .gradient-text {
             background: linear-gradient(to right, #60a5fa, #34d399);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
+        /* View Transition Styles */
+        .view-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .view-section.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Marquee Animation */
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .animate-scroll {
+            animation: scroll 20s linear infinite;
+        }
+
+        /* Filter Button Active State */
+        .filter-btn.active {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        /* Timeline styles */
+        .timeline-line {
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #1e293b;
+            z-index: 0;
+        }
+
+        @media (min-width: 768px) {
+            .timeline-line {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
     </style>
 </head>
-<body class="antialiased">
 
-    <nav class="fixed w-full z-50 glass top-0 left-0 border-b border-gray-800">
+<body class="antialiased selection:bg-blue-500 selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass top-0 left-0">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <div class="text-2xl font-bold tracking-tighter">YK<span class="text-blue-400">.</span></div>
-            <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-400">
-                <a href="#about" class="hover:text-white transition">About</a>
-                <a href="#skills" class="hover:text-white transition">Stack</a>
-                <a href="#projects" class="hover:text-white transition">Work</a>
-                <a href="#contact" class="text-blue-400 hover:text-blue-300 transition">Let's Talk</a>
+            <div onclick="switchView('home')"
+                class="text-2xl font-bold tracking-tighter cursor-pointer hover:opacity-80 transition">
+                YK<span class="text-blue-400">.</span>
             </div>
+
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-400">
+                <button onclick="switchView('home')" class="hover:text-white transition">Home</button>
+                <button onclick="switchView('projects')" class="hover:text-white transition">Projects</button>
+                <button onclick="switchView('resume')" class="hover:text-white transition text-blue-400">Resume</button>
+                <!-- Updated -->
+                <a href="#contact" class="hover:text-white transition">Contact</a>
+
+                <a href="path/to/Yash_Kushwaha_Resume.pdf" target="_blank"
+                    class="px-5 py-2 rounded-full border border-gray-600 hover:border-blue-400 hover:bg-blue-500/10 hover:text-white transition duration-300 flex items-center gap-2">
+                    <i data-lucide="download" class="w-4 h-4"></i> PDF
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-gray-400" onclick="alert('Mobile menu toggles here in a full app!')">
+                <i data-lucide="menu"></i>
+            </button>
         </div>
     </nav>
 
-    <section class="min-h-screen flex items-center justify-center relative pt-20">
-        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-[128px]"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[128px]"></div>
+    <!-- MAIN CONTENT CONTAINER -->
+    <main id="app-container">
 
-        <div class="container mx-auto px-6 text-center relative z-10">
-            <p class="mono text-blue-400 mb-4 hero-elem opacity-0 translate-y-10">Hi, I'm Yash Kushwaha</p>
-            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight hero-elem opacity-0 translate-y-10">
-                Architecting <span class="gradient-text">Fluid</span> Mobile<br>Experiences.
-            </h1>
-            <p class="text-gray-400 max-w-2xl mx-auto mb-10 text-lg hero-elem opacity-0 translate-y-10">
-                Full-Stack Mobile Engineer specializing in Flutter & Node.js. 
-                I bridge the gap between stunning UI/UX and robust backend logic.
-            </p>
-            <div class="hero-elem opacity-0 translate-y-10">
-                <a href="#projects" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-bold transition shadow-lg shadow-blue-500/30">View Projects</a>
-                <a href="mailto:Yashkushwaha65@gmail.com" class="ml-4 px-8 py-4 glass hover:bg-gray-800 rounded-full font-bold transition">Contact Me</a>
-            </div>
-        </div>
-    </section>
+        <!-- ======================= HOME VIEW ======================= -->
+        <div id="home-view" class="view-section active">
 
-    <div class="py-10 bg-slate-900/50 border-y border-gray-800 overflow-hidden">
-        <div class="flex space-x-12 animate-scroll whitespace-nowrap justify-center mono text-gray-500 font-bold text-xl">
-            <span>FLUTTER</span> <span>•</span>
-            <span>NODE.JS</span> <span>•</span>
-            <span>MONGODB</span> <span>•</span>
-            <span>DART</span> <span>•</span>
-            <span>FIREBASE</span> <span>•</span>
-            <span>GETX</span> <span>•</span>
-            <span>FIGMA</span> <span>•</span>
-            <span>REST API</span>
-        </div>
-    </div>
-
-    <section id="about" class="py-32 container mx-auto px-6">
-        <div class="grid md:grid-cols-2 gap-16 items-center">
-            <div class="about-img relative">
-                <div class="w-full h-96 bg-slate-800 rounded-2xl overflow-hidden relative group">
-                    <div class="absolute inset-0 bg-gradient-to-tr from-blue-600/20 to-emerald-500/20 z-10"></div>
-                    <img src="https://ui-avatars.com/api/?name=Yash+K&background=0f172a&color=3b82f6&size=512" alt="Yash Kushwaha" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500">
+            <!-- Hero Section -->
+            <section class="min-h-screen flex items-center justify-center relative pt-20">
+                <!-- Ambient Glow -->
+                <div
+                    class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-[128px] pointer-events-none">
                 </div>
-                <div class="absolute -bottom-6 -right-6 glass p-6 rounded-xl shadow-xl z-20">
-                    <p class="text-3xl font-bold text-blue-400">3+</p>
-                    <p class="text-sm text-gray-400">Years Experience</p>
+                <div
+                    class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[128px] pointer-events-none">
                 </div>
-            </div>
-            
-            <div class="about-text">
-                <h2 class="text-3xl md:text-5xl font-bold mb-6">More than just code.</h2>
-                <p class="text-gray-400 mb-6 leading-relaxed">
-                    I am a developer based in <span class="text-white">Vapi, Gujarat</span>, with a passion for building applications that solve real-world logistics and commerce problems.
-                </p>
-                <p class="text-gray-400 mb-6 leading-relaxed">
-                    Beyond the terminal, I am a recognized content creator for <span class="text-white">Clash Royale</span>. This experience has taught me how to build communities and understand user engagement—skills I bring into every app I build.
-                </p>
-                
-                <div class="grid grid-cols-2 gap-4 mt-8">
-                    <div class="p-4 border border-gray-800 rounded-lg hover:border-blue-500 transition">
-                        <h3 class="text-white font-bold">Frontend</h3>
-                        <p class="text-sm text-gray-500">Flutter, Figma, UI/UX</p>
+
+                <div class="container mx-auto px-6 text-center relative z-10">
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold mb-6 hero-elem opacity-0 translate-y-10">
+                        <span class="relative flex h-2 w-2">
+                            <span
+                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                        </span>
+                        AVAILABLE FOR HIRE
                     </div>
-                    <div class="p-4 border border-gray-800 rounded-lg hover:border-emerald-500 transition">
-                        <h3 class="text-white font-bold">Backend</h3>
-                        <p class="text-sm text-gray-500">Node.js, Mongo, SQL</p>
+
+                    <h1
+                        class="text-5xl md:text-8xl font-extrabold mb-6 leading-tight hero-elem opacity-0 translate-y-10">
+                        Architecting <span class="gradient-text">Fluid</span><br>Digital Ecosystems.
+                    </h1>
+
+                    <p
+                        class="text-gray-400 max-w-2xl mx-auto mb-10 text-lg hero-elem opacity-0 translate-y-10 leading-relaxed">
+                        Full-Stack Mobile Engineer (Flutter + Node.js). <br>
+                        I bridge the gap between pixel-perfect UI and scalable backend logic.
+                    </p>
+
+                    <div
+                        class="flex flex-col md:flex-row justify-center items-center gap-4 hero-elem opacity-0 translate-y-10">
+                        <button onclick="switchView('projects')"
+                            class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-bold transition shadow-lg shadow-blue-500/25 flex items-center gap-2 group">
+                            View My Work
+                            <i data-lucide="arrow-right"
+                                class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                        <button onclick="switchView('resume')"
+                            class="px-8 py-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white rounded-full font-bold transition">
+                            See Resume
+                        </button>
                     </div>
                 </div>
+            </section>
+
+            <!-- Tech Stack Marquee -->
+            <div class="py-10 bg-slate-900/50 border-y border-gray-800 overflow-hidden">
+                <div class="flex space-x-12 animate-scroll w-max mono text-gray-500 font-bold text-xl items-center">
+                    <!-- Duplicated items for seamless scroll -->
+                    <span>FLUTTER</span> <span class="text-blue-500">•</span>
+                    <span>NODE.JS</span> <span class="text-blue-500">•</span>
+                    <span>MONGODB</span> <span class="text-blue-500">•</span>
+                    <span>DART</span> <span class="text-blue-500">•</span>
+                    <span>FIREBASE</span> <span class="text-blue-500">•</span>
+                    <span>GETX</span> <span class="text-blue-500">•</span>
+                    <span>FIGMA</span> <span class="text-blue-500">•</span>
+                    <span>REST API</span> <span class="text-blue-500">•</span>
+                    <!-- Repeat -->
+                    <span>FLUTTER</span> <span class="text-blue-500">•</span>
+                    <span>NODE.JS</span> <span class="text-blue-500">•</span>
+                    <span>MONGODB</span> <span class="text-blue-500">•</span>
+                    <span>DART</span> <span class="text-blue-500">•</span>
+                    <span>FIREBASE</span> <span class="text-blue-500">•</span>
+                    <span>GETX</span> <span class="text-blue-500">•</span>
+                    <span>FIGMA</span> <span class="text-blue-500">•</span>
+                    <span>REST API</span>
+                </div>
             </div>
-        </div>
-    </section>
 
-    <section id="projects" class="py-32 bg-slate-900/30">
-        <div class="container mx-auto px-6">
-            <p class="mono text-blue-400 mb-2">PORTFOLIO</p>
-            <h2 class="text-4xl md:text-5xl font-bold mb-16">Selected Works</h2>
-
-            <div class="space-y-32">
-                <div class="project-card grid md:grid-cols-2 gap-12 items-center">
-                    <div class="order-2 md:order-1">
-                        <div class="mono text-emerald-400 text-sm mb-2">LOGISTICS & GEO-LOCATION</div>
-                        <h3 class="text-3xl font-bold mb-4">LINC App</h3>
-                        <p class="text-gray-400 mb-6">
-                            A hyper-local 10-minute delivery application similar to Blinkit. Engineered the real-time order tracking system using Socket.io and optimized logistics algorithms for driver allocation.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-8">
-                            <span class="px-3 py-1 bg-slate-800 rounded-full text-xs text-gray-300">Flutter</span>
-                            <span class="px-3 py-1 bg-slate-800 rounded-full text-xs text-gray-300">Google Maps API</span>
-                            <span class="px-3 py-1 bg-slate-800 rounded-full text-xs text-gray-300">Hive DB</span>
+            <!-- About Section -->
+            <section class="py-32 container mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div class="about-img relative">
+                        <div
+                            class="w-full h-96 bg-slate-800 rounded-2xl overflow-hidden relative group border border-gray-700">
+                            <!-- Placeholder Avatar -->
+                            <div
+                                class="absolute inset-0 bg-gradient-to-tr from-blue-600/20 to-emerald-500/20 z-10 mix-blend-overlay">
+                            </div>
+                            <img src="https://ui-avatars.com/api/?name=Yash+K&background=0f172a&color=3b82f6&size=512&font-size=0.33"
+                                alt="Yash"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
                         </div>
-                        <a href="#" class="text-blue-400 hover:text-white transition border-b border-blue-400 pb-1">View Case Study</a>
+                        <!-- Stat Card -->
+                        <div
+                            class="absolute -bottom-6 -right-6 glass p-6 rounded-xl border border-gray-700 shadow-2xl z-20">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-blue-500/20 p-3 rounded-lg text-blue-400">
+                                    <i data-lucide="code-2"></i>
+                                </div>
+                                <div>
+                                    <p class="text-3xl font-bold text-white">3+</p>
+                                    <p class="text-xs text-gray-400 uppercase tracking-wide">Years Exp.</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="order-1 md:order-2 h-64 md:h-96 bg-gradient-to-br from-slate-800 to-slate-700 rounded-2xl border border-gray-700 relative overflow-hidden group">
-                        <div class="absolute top-10 left-10 right-10 bottom-0 bg-slate-900 rounded-t-2xl shadow-2xl transform translate-y-4 group-hover:translate-y-0 transition duration-500 p-4">
-                            <div class="w-full h-full bg-slate-800 rounded-t-lg flex items-center justify-center text-gray-600">
-                                [LINC App Screenshot Placeholder]
+
+                    <div class="about-text">
+                        <h2 class="text-3xl md:text-5xl font-bold mb-6">More than just code.</h2>
+                        <p class="text-gray-400 mb-6 leading-relaxed text-lg">
+                            I am a software engineer based in <span class="text-white font-semibold">Vapi,
+                                Gujarat</span>. My expertise lies in building high-performance mobile applications that
+                            handle complex logic while feeling effortless to the user.
+                        </p>
+                        <p class="text-gray-400 mb-8 leading-relaxed">
+                            Beyond the IDE, I am a content creator for <span class="text-white font-semibold">Clash
+                                Royale</span>. Understanding community engagement and digital retention strategies is a
+                            "soft skill" I bake into every product I build.
+                        </p>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div
+                                class="p-4 bg-slate-800/50 rounded-lg border border-gray-800 hover:border-blue-500 transition group">
+                                <h3 class="text-white font-bold mb-1 group-hover:text-blue-400 transition">Frontend</h3>
+                                <p class="text-sm text-gray-500">Flutter, Figma, UI/UX</p>
+                            </div>
+                            <div
+                                class="p-4 bg-slate-800/50 rounded-lg border border-gray-800 hover:border-emerald-500 transition group">
+                                <h3 class="text-white font-bold mb-1 group-hover:text-emerald-400 transition">Backend
+                                </h3>
+                                <p class="text-sm text-gray-500">Node.js, Mongo, SQL</p>
                             </div>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                <div class="project-card grid md:grid-cols-2 gap-12 items-center">
-                    <div class="h-64 md:h-96 bg-gradient-to-br from-slate-800 to-slate-700 rounded-2xl border border-gray-700 relative overflow-hidden group">
-                         <div class="absolute top-10 left-10 right-10 bottom-0 bg-slate-900 rounded-t-2xl shadow-2xl transform translate-y-4 group-hover:translate-y-0 transition duration-500 p-4">
-                            <div class="w-full h-full bg-slate-800 rounded-t-lg flex items-center justify-center text-gray-600">
-                                [Wabric App Screenshot Placeholder]
+            <!-- Featured Projects Preview -->
+            <section class="py-32 bg-slate-900/30 border-t border-slate-800">
+                <div class="container mx-auto px-6">
+                    <div class="flex justify-between items-end mb-16">
+                        <div>
+                            <p class="mono text-blue-400 mb-2 text-sm">SELECTED WORKS</p>
+                            <h2 class="text-4xl md:text-5xl font-bold">Featured Projects</h2>
+                        </div>
+                        <button onclick="switchView('projects')"
+                            class="hidden md:flex items-center gap-2 text-gray-400 hover:text-white transition group">
+                            View Archive <i data-lucide="arrow-right"
+                                class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+
+                    <div class="space-y-32">
+                        <!-- Project 1: Fg GlassPro -->
+                        <div class="group grid md:grid-cols-2 gap-12 items-center featured-project">
+                            <div class="order-2 md:order-1">
+                                <div class="mono text-blue-400 text-xs mb-4 flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-blue-400"></span> ERP SOLUTION
+                                </div>
+                                <h3 class="text-3xl font-bold mb-4">Fg GlassPro</h3>
+                                <p class="text-gray-400 mb-6 leading-relaxed">
+                                    ERP solution tailored for the glass industry featuring order tracking, customer
+                                    management, digital invoicing. Streamlined operations for SMEs and reduced manual
+                                    paperwork.
+                                </p>
+                                <div class="flex flex-wrap gap-2 mb-8">
+                                    <span
+                                        class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs text-gray-300">Flutter</span>
+                                    <span
+                                        class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs text-gray-300">Firebase</span>
+                                    <span
+                                        class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs text-gray-300">MongoDB</span>
+                                </div>
+                                <button onclick="switchView('projects')"
+                                    class="text-blue-400 hover:text-white transition border-b border-blue-400/30 pb-1 text-sm font-bold">View
+                                    Details</button>
+                            </div>
+                            <div class="order-1 md:order-2 relative group cursor-pointer"
+                                onclick="switchView('projects')">
+                                <div
+                                    class="absolute inset-0 bg-blue-500/10 rounded-2xl transform rotate-3 group-hover:rotate-1 transition duration-500">
+                                </div>
+                                <div
+                                    class="h-64 md:h-80 bg-slate-800 rounded-2xl border border-gray-700 relative overflow-hidden shadow-2xl">
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent z-10">
+                                    </div>
+                                    <div
+                                        class="w-full h-full flex items-center justify-center text-slate-600 font-bold text-2xl bg-slate-800">
+                                        GLASS PRO
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project 2: Future Tracker -->
+                        <div class="group grid md:grid-cols-2 gap-12 items-center featured-project">
+                            <div class="relative group cursor-pointer" onclick="switchView('projects')">
+                                <div
+                                    class="absolute inset-0 bg-emerald-500/10 rounded-2xl transform -rotate-3 group-hover:-rotate-1 transition duration-500">
+                                </div>
+                                <div
+                                    class="h-64 md:h-80 bg-slate-800 rounded-2xl border border-gray-700 relative overflow-hidden shadow-2xl">
+                                    <div
+                                        class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent z-10">
+                                    </div>
+                                    <div
+                                        class="w-full h-full flex items-center justify-center text-slate-600 font-bold text-2xl bg-slate-800">
+                                        FUTURE TRACKER
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="mono text-emerald-400 text-xs mb-4 flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span> PRODUCTIVITY
+                                </div>
+                                <h3 class="text-3xl font-bold mb-4">Future Tracker</h3>
+                                <p class="text-gray-400 mb-6 leading-relaxed">
+                                    Productivity and business tracking app for sales and project monitoring. Improved
+                                    team accountability and reporting efficiency.
+                                </p>
+                                <div class="flex flex-wrap gap-2 mb-8">
+                                    <span
+                                        class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs text-gray-300">Flutter</span>
+                                    <span
+                                        class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs text-gray-300">Node.js</span>
+                                    <span
+                                        class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-full text-xs text-gray-300">Firebase</span>
+                                </div>
+                                <button onclick="switchView('projects')"
+                                    class="text-blue-400 hover:text-white transition border-b border-blue-400/30 pb-1 text-sm font-bold">View
+                                    Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ======================= PROJECTS VIEW ======================= -->
+        <div id="projects-view" class="view-section">
+
+            <header class="pt-32 pb-16 px-6 text-center container mx-auto">
+                <button onclick="switchView('home')"
+                    class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-white mb-8 transition">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Back home
+                </button>
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">The <span class="text-blue-400">Archive</span></h1>
+                <p class="text-gray-400 max-w-xl mx-auto mb-10">
+                    A comprehensive collection of applications, prototypes, and web solutions I've engineered.
+                </p>
+
+                <!-- Filter Buttons -->
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button onclick="filterProjects('all', this)"
+                        class="filter-btn active px-6 py-2 rounded-full border border-gray-700 text-sm font-bold transition hover:border-blue-400">All</button>
+                    <button onclick="filterProjects('application', this)"
+                        class="filter-btn px-6 py-2 rounded-full border border-gray-700 text-sm font-bold transition hover:border-blue-400">Applications</button>
+                    <button onclick="filterProjects('design', this)"
+                        class="filter-btn px-6 py-2 rounded-full border border-gray-700 text-sm font-bold transition hover:border-blue-400">Mobile
+                        Designs</button>
+                    <button onclick="filterProjects('web', this)"
+                        class="filter-btn px-6 py-2 rounded-full border border-gray-700 text-sm font-bold transition hover:border-blue-400">Web
+                        Dev</button>
+                </div>
+            </header>
+
+            <!-- Project Grid -->
+            <section class="container mx-auto px-6 pb-32">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="project-grid-container">
+                    <!-- Javascript will populate this -->
+                </div>
+            </section>
+
+        </div>
+
+        <!-- ======================= RESUME VIEW (NEW) ======================= -->
+        <div id="resume-view" class="view-section">
+            <div class="pt-32 pb-16 container mx-auto px-6 max-w-4xl">
+
+                <!-- Resume Header -->
+                <div
+                    class="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 border-b border-gray-800 pb-8 resume-anim opacity-0 translate-y-4">
+                    <div>
+                        <h1 class="text-5xl font-bold mb-2">Yash Kushwaha</h1>
+                        <p class="text-xl text-blue-400 mb-4">Full-Stack Mobile Application Developer</p>
+                        <div class="flex flex-wrap gap-4 text-sm text-gray-400">
+                            <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-4 h-4"></i> Vapi,
+                                Gujarat</span>
+                            <span class="flex items-center gap-1"><i data-lucide="phone" class="w-4 h-4"></i> +91
+                                7990714432</span>
+                            <span class="flex items-center gap-1"><i data-lucide="mail" class="w-4 h-4"></i>
+                                Yashkushwaha65@gmail.com</span>
+                        </div>
+                    </div>
+                    <div class="mt-6 md:mt-0">
+                        <a href="path/to/Yash_Kushwaha_Resume.pdf" target="_blank"
+                            class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold transition flex items-center gap-2 shadow-lg shadow-blue-500/20">
+                            <i data-lucide="download" class="w-5 h-5"></i> Download PDF
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Professional Summary -->
+                <section class="mb-16 resume-anim opacity-0 translate-y-4">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+                        <span class="w-8 h-1 bg-blue-500 rounded-full"></span> Professional Summary
+                    </h2>
+                    <p class="text-gray-300 leading-relaxed text-lg">
+                        Innovative Software Engineer with over 3 years of experience in cross-platform mobile
+                        application development. Specialist in building scalable, high-performance applications using
+                        <span class="text-white font-semibold">Flutter</span> for the frontend and <span
+                            class="text-white font-semibold">Node.js/MongoDB</span> for backend services. Proven track
+                        record of managing the complete app development lifecycle—from client requirement gathering and
+                        UI/UX design to deployment on App Store and Play Store.
+                    </p>
+                </section>
+
+                <!-- Technical Skills -->
+                <section class="mb-16 resume-anim opacity-0 translate-y-4">
+                    <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-2">
+                        <span class="w-8 h-1 bg-blue-500 rounded-full"></span> Technical Skills
+                    </h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Skill Item -->
+                        <div class="bg-slate-900/50 p-4 rounded-xl border border-gray-800">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-semibold">Mobile Development</span>
+                                <span class="text-blue-400 text-sm">Flutter, Dart, Kotlin</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full skill-bar" style="width: 0%" data-width="95%">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-slate-900/50 p-4 rounded-xl border border-gray-800">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-semibold">Backend & Database</span>
+                                <span class="text-emerald-400 text-sm">Node.js, Mongo, Firebase</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-full h-2">
+                                <div class="bg-emerald-500 h-2 rounded-full skill-bar" style="width: 0%"
+                                    data-width="85%"></div>
+                            </div>
+                        </div>
+                        <div class="bg-slate-900/50 p-4 rounded-xl border border-gray-800">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-semibold">State Management</span>
+                                <span class="text-purple-400 text-sm">GetX, Provider, BLoC</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-full h-2">
+                                <div class="bg-purple-500 h-2 rounded-full skill-bar" style="width: 0%"
+                                    data-width="90%"></div>
+                            </div>
+                        </div>
+                        <div class="bg-slate-900/50 p-4 rounded-xl border border-gray-800">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-300 font-semibold">Tools & DevOps</span>
+                                <span class="text-pink-400 text-sm">Git, CI/CD, Figma</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-full h-2">
+                                <div class="bg-pink-500 h-2 rounded-full skill-bar" style="width: 0%" data-width="80%">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Experience Timeline -->
+                <section class="mb-16 relative resume-anim opacity-0 translate-y-4">
+                    <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-2">
+                        <span class="w-8 h-1 bg-blue-500 rounded-full"></span> Professional Experience
+                    </h2>
+
+                    <div class="relative pl-8 md:pl-0">
+                        <!-- Vertical Line -->
+                        <div class="timeline-line hidden md:block"></div>
+
+                        <!-- Job 1 -->
+                        <div class="relative md:w-1/2 md:ml-auto md:pl-10 pb-12 group">
+                            <!-- Dot -->
+                            <div
+                                class="absolute left-[-9px] top-1 w-5 h-5 bg-blue-500 rounded-full border-4 border-slate-900 z-10 hidden md:block">
+                            </div>
+
+                            <div
+                                class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 hover:border-blue-500/50 transition duration-300">
+                                <span class="text-blue-400 text-sm font-bold mono">2023 - PRESENT</span>
+                                <h3 class="text-xl font-bold text-white mt-1">Software Engineer (Flutter)</h3>
+                                <p class="text-gray-400 text-sm mb-4">Proactii Media LLP Pvt Ltd | Vapi, Gujarat</p>
+                                <ul class="space-y-2 text-gray-300 text-sm list-disc pl-4">
+                                    <li>Spearheaded development of 5+ enterprise-grade Flutter apps.</li>
+                                    <li>Managed end-to-end SDLC from architecture to deployment.</li>
+                                    <li>Implemented secure payments (Stripe, Razorpay, UPI).</li>
+                                    <li>Optimized networking with Dio/HTTP for RESTful APIs.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Job 2 -->
+                        <div class="relative md:w-1/2 md:mr-auto md:pr-10 pb-12 text-left md:text-right group">
+                            <!-- Dot -->
+                            <div
+                                class="absolute right-[-11px] top-1 w-5 h-5 bg-gray-600 rounded-full border-4 border-slate-900 z-10 hidden md:block">
+                            </div>
+
+                            <div
+                                class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 hover:border-gray-500/50 transition duration-300">
+                                <span class="text-gray-500 text-sm font-bold mono">OCT 2022 - DEC 2022</span>
+                                <h3 class="text-xl font-bold text-white mt-1">Mobile App Developer Intern</h3>
+                                <p class="text-gray-400 text-sm mb-4">Teachnook | Remote</p>
+                                <ul
+                                    class="space-y-2 text-gray-300 text-sm list-disc pl-4 md:pl-0 md:pr-4 inline-block text-left md:text-right">
+                                    <li>Developed E-commerce app with Firebase Auth & Database.</li>
+                                    <li>Created interactive gamified Quiz Application.</li>
+                                    <li>Mastered clean architecture & reusable code patterns.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Key Projects Resume Section -->
+                <section class="mb-16 resume-anim opacity-0 translate-y-4">
+                    <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-2">
+                        <span class="w-8 h-1 bg-blue-500 rounded-full"></span> Key Projects
+                    </h2>
+                    <div class="space-y-6">
+                        <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl hover:bg-slate-800 transition cursor-pointer"
+                            onclick="switchView('projects')">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-bold text-white">Wabric Fashion (Zara Clone)</h3>
+                                <span
+                                    class="text-xs px-2 py-1 bg-pink-500/10 text-pink-400 rounded border border-pink-500/20">Full-Stack</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mt-2">Built high-fidelity e-commerce app with
+                                Node.js/MongoDB backend. Implemented GetX for state management and integrated
+                                Stripe/Razorpay.</p>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl hover:bg-slate-800 transition cursor-pointer"
+                            onclick="switchView('projects')">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-bold text-white">LINC Delivery App</h3>
+                                <span
+                                    class="text-xs px-2 py-1 bg-emerald-500/10 text-emerald-400 rounded border border-emerald-500/20">Logistics</span>
+                            </div>
+                            <p class="text-gray-400 text-sm mt-2">Engineered 10-minute delivery app using Socket.io for
+                                tracking and Google Maps API. Optimized for high concurrency.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Education & Certs -->
+                <section class="grid md:grid-cols-2 gap-8 resume-anim opacity-0 translate-y-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+                            <span class="w-8 h-1 bg-blue-500 rounded-full"></span> Education
+                        </h2>
+                        <div class="space-y-6 border-l-2 border-gray-800 pl-6">
+                            <div>
+                                <h3 class="text-lg font-bold text-white">Master of Computer Applications</h3>
+                                <p class="text-gray-400">Chandigarh University</p>
+                                <p class="text-blue-400 text-sm">GPA: 6.98</p>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-white">Bachelor of Computer Application</h3>
+                                <p class="text-gray-400">Savitribai Phule Pune University</p>
+                                <p class="text-blue-400 text-sm">GPA: 6.9</p>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <div class="mono text-pink-400 text-sm mb-2">E-COMMERCE</div>
-                        <h3 class="text-3xl font-bold mb-4">Wabric Fashion</h3>
-                        <p class="text-gray-400 mb-6">
-                            A high-fidelity Zara clone focusing on premium UX. Built a complete backend with Node.js/MongoDB to manage complex inventory and integrated Stripe/Razorpay for secure payments.
-                        </p>
-                        <div class="flex flex-wrap gap-2 mb-8">
-                            <span class="px-3 py-1 bg-slate-800 rounded-full text-xs text-gray-300">GetX State Mgmt</span>
-                            <span class="px-3 py-1 bg-slate-800 rounded-full text-xs text-gray-300">Node.js</span>
-                            <span class="px-3 py-1 bg-slate-800 rounded-full text-xs text-gray-300">Stripe</span>
-                        </div>
-                        <a href="#" class="text-blue-400 hover:text-white transition border-b border-blue-400 pb-1">View Case Study</a>
+                        <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+                            <span class="w-8 h-1 bg-blue-500 rounded-full"></span> Certifications
+                        </h2>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="award" class="w-5 h-5 text-yellow-500 mt-1"></i>
+                                <div>
+                                    <h4 class="font-bold text-white">App Publishing</h4>
+                                    <p class="text-sm text-gray-400">Successfully published multiple apps to Google Play
+                                        Store & Amazon App Store.</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i data-lucide="users" class="w-5 h-5 text-blue-500 mt-1"></i>
+                                <div>
+                                    <h4 class="font-bold text-white">Clash Royale Creator</h4>
+                                    <p class="text-sm text-gray-400">Recognized content creator demonstrating community
+                                        building skills.</p>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                </div>
+                </section>
+
             </div>
         </div>
-    </section>
 
-    <section class="py-32 container mx-auto px-6">
-        <h2 class="text-4xl font-bold mb-16 text-center">Journey</h2>
-        <div class="max-w-3xl mx-auto space-y-12 relative border-l border-gray-800 pl-8 ml-4 md:ml-0">
-            
-            <div class="relative experience-item">
-                <span class="absolute -left-10 top-1 w-4 h-4 rounded-full bg-blue-500 border-4 border-slate-900"></span>
-                <div class="mb-1 text-sm text-gray-500 mono">2023 - PRESENT</div>
-                <h3 class="text-xl font-bold text-white">Software Engineer (Flutter)</h3>
-                <p class="text-blue-400 text-sm mb-2">Proactii Media LLP Pvt Ltd</p>
-                <p class="text-gray-400 text-sm leading-relaxed">
-                    Deploying enterprise-grade apps to Play Store & App Store. Managing full SDLC and client requirements.
-                </p>
-            </div>
+    </main>
 
-            <div class="relative experience-item">
-                <span class="absolute -left-10 top-1 w-4 h-4 rounded-full bg-gray-600 border-4 border-slate-900"></span>
-                <div class="mb-1 text-sm text-gray-500 mono">2022</div>
-                <h3 class="text-xl font-bold text-white">Mobile App Developer Intern</h3>
-                <p class="text-blue-400 text-sm mb-2">Teachnook</p>
-                <p class="text-gray-400 text-sm leading-relaxed">
-                    Developed E-commerce and Quiz applications using Firebase backend.
-                </p>
-            </div>
-
-        </div>
-    </section>
-
-    <section id="contact" class="py-20 border-t border-gray-800 bg-slate-900/50">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-4xl font-bold mb-8">Ready to build something amazing?</h2>
-            <p class="text-gray-400 mb-10">Currently available for freelance projects and full-time roles.</p>
-            <a href="mailto:Yashkushwaha65@gmail.com" class="text-3xl md:text-5xl font-bold text-blue-400 hover:text-white transition duration-300">
+    <!-- Footer -->
+    <footer id="contact" class="py-12 border-t border-gray-800 bg-slate-900 text-center">
+        <div class="container mx-auto px-6">
+            <h2 class="text-2xl font-bold mb-8 text-white">Ready to collaborate?</h2>
+            <a href="mailto:Yashkushwaha65@gmail.com"
+                class="text-3xl md:text-4xl font-bold text-blue-400 hover:text-white transition duration-300">
                 Yashkushwaha65@gmail.com
             </a>
-            
-            <div class="flex justify-center space-x-8 mt-12">
-                <a href="#" class="text-gray-500 hover:text-white transition">LinkedIn</a>
-                <a href="#" class="text-gray-500 hover:text-white transition">GitHub</a>
-                <a href="#" class="text-gray-500 hover:text-white transition">Twitter</a>
+
+            <div class="flex justify-center space-x-8 mt-12 mb-8">
+                <a href="#" class="text-gray-500 hover:text-white transition hover:-translate-y-1 transform"><i
+                        data-lucide="linkedin"></i></a>
+                <a href="#" class="text-gray-500 hover:text-white transition hover:-translate-y-1 transform"><i
+                        data-lucide="github"></i></a>
+                <a href="#" class="text-gray-500 hover:text-white transition hover:-translate-y-1 transform"><i
+                        data-lucide="twitter"></i></a>
             </div>
-            
-            <div class="mt-20 text-gray-600 text-sm">
+
+            <p class="text-gray-600 text-sm">
                 &copy; 2025 Yash Kushwaha. Built with Flutter precision.
-            </div>
+            </p>
         </div>
-    </section>
+    </footer>
 
+    <!-- LOGIC SCRIPT -->
     <script>
-        gsap.registerPlugin(ScrollTrigger);
+        // Initialize Icons
+        lucide.createIcons();
 
-        // Hero Stagger
-        gsap.to(".hero-elem", {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            stagger: 0.2,
-            ease: "power3.out"
-        });
-
-        // About Section Parallax
-        gsap.from(".about-img", {
-            scrollTrigger: {
-                trigger: "#about",
-                start: "top 80%",
+        // --- DATA ---
+        const projects = [
+            // APPLICATIONS
+            {
+                title: "Fg GlassPro",
+                category: ["application"],
+                desc: "ERP solution tailored for the glass industry. Features order tracking, customer management, digital invoicing. Streamlined operations for SMEs and reduced manual paperwork.",
+                tags: ["Flutter", "Firebase", "MongoDB"],
+                color: "blue"
             },
-            x: -50,
-            opacity: 0,
-            duration: 1
-        });
-        
-        gsap.from(".about-text", {
-            scrollTrigger: {
-                trigger: "#about",
-                start: "top 80%",
+            {
+                title: "Future Tracker",
+                category: ["application"],
+                desc: "Productivity and business tracking app. Features project monitoring, sales tracking, and reporting dashboards. Improved team accountability and efficiency.",
+                tags: ["Flutter", "Node.js", "Firebase"],
+                color: "emerald"
             },
-            x: 50,
-            opacity: 0,
-            duration: 1,
-            delay: 0.2
-        });
+            {
+                title: "Convex",
+                category: ["application"],
+                desc: "Business analytics and reporting tool. Features live dashboards and predictive insights. Helped businesses make data-driven decisions with real-time visibility.",
+                tags: ["Flutter", "REST API", "Analytics"],
+                color: "purple"
+            },
+            {
+                title: "Productivity App",
+                category: ["application"],
+                desc: "Task and schedule management for teams. Features collaboration boards and reminders. Enhanced team collaboration and reduced missed deadlines.",
+                tags: ["Flutter", "Provider", "FCM"],
+                color: "orange"
+            },
 
-        // Project Cards Scale Up
-        gsap.utils.toArray(".project-card").forEach((card) => {
-            gsap.from(card, {
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top 85%",
-                },
-                y: 50,
-                scale: 0.95,
-                opacity: 0,
-                duration: 0.8,
+            // MOBILE DESIGNS
+            {
+                title: "Edu-Point",
+                category: ["design"],
+                desc: "Community learning app prototype. Features student-teacher interaction and course management. Designed to foster interactive learning environments.",
+                tags: ["Figma", "UI/UX", "Education"],
+                color: "pink"
+            },
+            {
+                title: "Fundo",
+                category: ["design"],
+                desc: "Finance management app design. Features expense tracking and budgeting tools. Simplified personal finance management concepts for users.",
+                tags: ["Figma", "Flutter", "Finance"],
+                color: "yellow"
+            },
+            {
+                title: "DSM.",
+                category: ["design"],
+                desc: "Digital service management prototype. Features workflow automation and task assignment. Conceptualized for businesses to manage digital services efficiently.",
+                tags: ["Figma", "Workflow", "B2B"],
+                color: "cyan"
+            },
+            {
+                title: "Creative Concept",
+                category: ["design"],
+                desc: "Modern UI concept for networking and sharing. Features sleek design elements and intuitive navigation. Showcased innovative UI/UX approaches.",
+                tags: ["Figma", "UI/UX", "Social"],
+                color: "indigo"
+            },
+
+            // WEB DEVELOPMENT
+            {
+                title: "Reporting Dashboard",
+                category: ["web"],
+                desc: "Web-based reporting and summary dashboards. Features responsive design, interactive charts, and secure login. Provided businesses with accessible tools.",
+                tags: ["HTML", "JS", "Firebase"],
+                color: "red"
+            },
+            {
+                title: "Portfolio Website",
+                category: ["web"],
+                desc: "Personal portfolio showcasing apps and designs. Features clean UI, responsive layout, and optimized performance. Enhanced professional branding.",
+                tags: ["HTML", "CSS", "JS"],
+                color: "teal"
+            }
+        ];
+
+        // --- RENDER PROJECTS ---
+        const gridContainer = document.getElementById('project-grid-container');
+
+        function renderProjects() {
+            gridContainer.innerHTML = projects.map((p, index) => `
+                <div class="project-card ${p.category.join(' ')} bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-${p.color}-500/50 transition duration-300 group opacity-0 translate-y-4">
+                    <div class="h-48 bg-slate-800 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent z-10"></div>
+                        <div class="w-full h-full bg-slate-800 flex items-center justify-center text-slate-700 font-bold group-hover:scale-105 transition duration-500">
+                            ${p.title.toUpperCase()}
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-white">${p.title}</h3>
+                            <span class="px-2 py-1 bg-${p.color}-500/10 text-${p.color}-400 text-xs rounded border border-${p.color}-500/20 uppercase">${p.category[0]}</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-6 line-clamp-4 leading-relaxed">${p.desc}</p>
+                        <div class="flex gap-2 text-xs text-gray-500 mono flex-wrap">
+                            ${p.tags.map(t => `<span>#${t}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        renderProjects();
+
+        // --- VIEW SWITCHING LOGIC ---
+        function switchView(viewName) {
+            const views = {
+                'home': document.getElementById('home-view'),
+                'projects': document.getElementById('projects-view'),
+                'resume': document.getElementById('resume-view')
+            };
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Hide all current active views
+            for (const key in views) {
+                if (views[key].classList.contains('active') && key !== viewName) {
+                    gsap.to(views[key], {
+                        opacity: 0, duration: 0.3, onComplete: () => {
+                            views[key].classList.remove('active');
+                            // Activate new view
+                            const newView = views[viewName];
+                            if (newView) {
+                                newView.classList.add('active');
+                                gsap.to(newView, { opacity: 1, duration: 0.5 });
+
+                                // Specific animations based on view
+                                if (viewName === 'projects') animateProjectsEntry();
+                                if (viewName === 'resume') animateResumeEntry();
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        function animateProjectsEntry() {
+            gsap.to(".project-card", {
+                y: 0,
+                opacity: 1,
+                duration: 0.5,
+                stagger: 0.1,
                 ease: "power2.out"
+            });
+        }
+
+        function animateResumeEntry() {
+            // Animate Resume Sections
+            gsap.to(".resume-anim", {
+                y: 0,
+                opacity: 1,
+                duration: 0.6,
+                stagger: 0.2,
+                ease: "power2.out"
+            });
+
+            // Animate Skill Bars
+            gsap.utils.toArray(".skill-bar").forEach(bar => {
+                gsap.to(bar, {
+                    width: bar.getAttribute("data-width"),
+                    duration: 1.5,
+                    ease: "power2.out",
+                    delay: 0.5
+                });
+            });
+        }
+
+        // --- FILTER LOGIC ---
+        function filterProjects(category, btnElement) {
+            // Update buttons
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if (btnElement) btnElement.classList.add('active');
+
+            const cards = document.querySelectorAll('.project-card');
+
+            cards.forEach(card => {
+                const shouldShow = category === 'all' || card.classList.contains(category);
+
+                if (shouldShow) {
+                    card.style.display = 'block';
+                    gsap.to(card, { opacity: 1, scale: 1, duration: 0.4 });
+                } else {
+                    gsap.to(card, {
+                        opacity: 0, scale: 0.9, duration: 0.4, onComplete: () => {
+                            card.style.display = 'none';
+                        }
+                    });
+                }
+            });
+        }
+
+        // --- HERO ANIMATIONS ---
+        window.addEventListener('load', () => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            gsap.to(".hero-elem", {
+                y: 0,
+                opacity: 1,
+                duration: 1,
+                stagger: 0.2,
+                ease: "power3.out"
+            });
+
+            // About Section Parallax
+            gsap.from(".about-img", {
+                scrollTrigger: { trigger: ".about-img", start: "top 80%" },
+                x: -50, opacity: 0, duration: 1
+            });
+
+            gsap.from(".about-text", {
+                scrollTrigger: { trigger: ".about-text", start: "top 80%" },
+                x: 50, opacity: 0, duration: 1, delay: 0.2
+            });
+
+            // Featured Projects
+            gsap.utils.toArray(".featured-project").forEach((project) => {
+                gsap.from(project, {
+                    scrollTrigger: { trigger: project, start: "top 85%" },
+                    y: 50, opacity: 0, duration: 0.8
+                });
             });
         });
 
-        // Experience Line
-        gsap.from(".experience-item", {
-            scrollTrigger: {
-                trigger: ".experience-item",
-                start: "top 90%",
-            },
-            y: 20,
-            opacity: 0,
-            stagger: 0.3,
-            duration: 0.8
-        });
     </script>
 </body>
+
 </html>
