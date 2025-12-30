@@ -165,10 +165,10 @@ morden_portfolio/
 <div align="center">
 
 ### Desktop View
-![Desktop View Placeholder](/assets/images/profile_view.png)
+![Desktop View Placeholder](/assets/images/desktop_view.png)
 
 ### Mobile View
-![Mobile View Placeholder](https://via.placeholder.com/400x600/0891b2/ffffff?text=Mobile+View)
+![Mobile View Placeholder](/assets/images/mobile_view.png)
 
 ### Easter Egg: Developer Mode ☕
 ![Easter Egg Placeholder](/assets/images/dev_mode.png)

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Yash Kushwaha | Full-Stack Mobile Engineer</title>
 
     <!-- Tailwind CSS -->
@@ -27,6 +27,8 @@
             background-color: #0f172a;
             color: #e2e8f0;
             overflow-x: hidden;
+            width: 100%;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .mono {
@@ -49,9 +51,15 @@
 
         /* Glassmorphism */
         .glass {
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Mobile Menu specific glass */
+        .mobile-menu-glass {
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(16px);
         }
 
         .gradient-text {
@@ -215,6 +223,22 @@
             /* Glow intensifies */
             transform: scale(1.02);
         }
+
+        /* Mobile Menu Transitions */
+        #mobile-menu {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .mobile-nav-link {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+        }
+
+        #mobile-menu.open .mobile-nav-link {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 
@@ -232,12 +256,44 @@
         </div>
     </div>
 
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu"
+        class="fixed inset-0 z-[60] mobile-menu-glass translate-x-full md:hidden flex flex-col justify-center items-center">
+        <button onclick="toggleMobileMenu()"
+            class="absolute top-6 right-6 p-2 text-gray-400 hover:text-white transition rounded-full hover:bg-white/10">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+
+        <div class="flex flex-col items-center space-y-8 p-6 w-full max-w-sm text-center">
+            <button onclick="mobileNavigate('home')"
+                class="mobile-nav-link text-3xl font-bold text-gray-300 hover:text-white transition"
+                style="transition-delay: 0.1s">Home</button>
+            <button onclick="mobileNavigate('projects')"
+                class="mobile-nav-link text-3xl font-bold text-gray-300 hover:text-white transition"
+                style="transition-delay: 0.2s">Projects</button>
+            <button onclick="mobileNavigate('resume')"
+                class="mobile-nav-link text-3xl font-bold text-blue-400 hover:text-blue-300 transition"
+                style="transition-delay: 0.3s">Resume</button>
+            <a href="#contact" onclick="toggleMobileMenu()"
+                class="mobile-nav-link text-3xl font-bold text-gray-300 hover:text-white transition"
+                style="transition-delay: 0.4s">Contact</a>
+
+            <div class="w-16 h-1 bg-gray-800 rounded-full my-6 mobile-nav-link" style="transition-delay: 0.45s"></div>
+
+            <a href="/assets/YashKushwaha_Resume.pdf" target="_blank" onclick="toggleMobileMenu()"
+                class="mobile-nav-link w-full py-4 rounded-xl border border-gray-600 hover:border-blue-400 hover:bg-blue-500/10 text-white transition duration-300 flex items-center justify-center gap-3 font-bold"
+                style="transition-delay: 0.5s">
+                <i data-lucide="download" class="w-5 h-5"></i> Download Resume
+            </a>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="fixed w-full z-50 glass top-0 left-0">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <!-- Easter Egg Trigger: Click this 5 times -->
             <div id="logo-trigger"
-                class="text-2xl font-bold tracking-tighter cursor-pointer hover:opacity-80 transition select-none">
+                class="text-2xl font-bold tracking-tighter cursor-pointer hover:opacity-80 transition select-none z-50 relative">
                 YK<span class="text-blue-400">.</span>
             </div>
 
@@ -255,33 +311,33 @@
             </div>
 
             <!-- Mobile Menu Button -->
-            <button class="md:hidden text-gray-400" onclick="alert('Mobile menu toggles here in a full app!')">
-                <i data-lucide="menu"></i>
+            <button class="md:hidden text-gray-400 hover:text-white p-2" onclick="toggleMobileMenu()">
+                <i data-lucide="menu" class="w-7 h-7"></i>
             </button>
         </div>
     </nav>
 
     <!-- Buy Me A Coffee Button (Fixed) -->
     <a href="https://buymeacoffee.com/kalkidevs" target="_blank"
-        class="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-5 py-3 bg-[#FFDD00] hover:bg-[#ffea00] text-slate-900 rounded-full font-bold shadow-lg shadow-yellow-400/20 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group coffee-pulse">
+        class="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-3 md:px-5 md:py-3 bg-[#FFDD00] hover:bg-[#ffea00] text-slate-900 rounded-full font-bold shadow-lg shadow-yellow-400/20 transition-all duration-300 hover:scale-105 hover:-translate-y-1 group coffee-pulse text-sm md:text-base">
         <i data-lucide="coffee" class="w-5 h-5 fill-slate-900"></i>
-        <span class="font-bold">Buy me a coffee</span>
+        <span class="font-bold hidden xs:inline">Buy me a coffee</span>
     </a>
 
     <!-- MAIN CONTENT CONTAINER -->
-    <main id="app-container">
+    <main id="app-container" class="w-full overflow-hidden">
 
         <!-- ======================= HOME VIEW ======================= -->
         <div id="home-view" class="view-section active">
 
             <!-- Hero Section -->
-            <section class="min-h-screen flex items-center justify-center relative pt-20">
-                <!-- Ambient Glow -->
+            <section class="min-h-screen flex items-center justify-center relative pt-20 overflow-hidden">
+                <!-- Ambient Glow - Adjusted for mobile to prevent overflow -->
                 <div
-                    class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-[128px] pointer-events-none">
+                    class="absolute top-1/4 -left-20 md:left-1/4 w-64 h-64 md:w-96 md:h-96 bg-blue-600/20 rounded-full blur-[80px] md:blur-[128px] pointer-events-none">
                 </div>
                 <div
-                    class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[128px] pointer-events-none">
+                    class="absolute bottom-1/4 -right-20 md:right-1/4 w-64 h-64 md:w-96 md:h-96 bg-emerald-500/10 rounded-full blur-[80px] md:blur-[128px] pointer-events-none">
                 </div>
 
                 <div class="container mx-auto px-6 text-center relative z-10">
@@ -295,27 +351,28 @@
                         AVAILABLE FOR HIRE
                     </div>
 
+                    <!-- Typography adjusted for mobile (text-4xl instead of 5xl base) -->
                     <h1
-                        class="text-5xl md:text-8xl font-extrabold mb-6 leading-tight hero-elem opacity-0 translate-y-10">
+                        class="text-4xl md:text-6xl lg:text-8xl font-extrabold mb-6 leading-tight hero-elem opacity-0 translate-y-10 tracking-tight">
                         Architecting <span class="gradient-text">Fluid</span><br>Digital Ecosystems.
                     </h1>
 
                     <p
-                        class="text-gray-400 max-w-2xl mx-auto mb-10 text-lg hero-elem opacity-0 translate-y-10 leading-relaxed">
-                        Full-Stack Mobile Engineer (Flutter + Node.js). <br>
+                        class="text-gray-400 max-w-2xl mx-auto mb-10 text-base md:text-lg hero-elem opacity-0 translate-y-10 leading-relaxed px-4">
+                        Full-Stack Mobile Engineer (Flutter + Node.js). <br class="hidden md:block">
                         I bridge the gap between pixel-perfect UI and scalable backend logic.
                     </p>
 
                     <div
-                        class="flex flex-col md:flex-row justify-center items-center gap-4 hero-elem opacity-0 translate-y-10">
+                        class="flex flex-col sm:flex-row justify-center items-center gap-4 hero-elem opacity-0 translate-y-10 w-full max-w-md mx-auto sm:max-w-none">
                         <button onclick="switchView('projects')"
-                            class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-bold transition shadow-lg shadow-blue-500/25 flex items-center gap-2 group">
+                            class="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-bold transition shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 group">
                             View My Work
                             <i data-lucide="arrow-right"
                                 class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                         </button>
                         <button onclick="switchView('resume')"
-                            class="px-8 py-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white rounded-full font-bold transition">
+                            class="w-full sm:w-auto px-8 py-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white rounded-full font-bold transition">
                             See Resume
                         </button>
                     </div>
@@ -324,7 +381,8 @@
 
             <!-- Tech Stack Marquee -->
             <div class="py-10 bg-slate-900/50 border-y border-gray-800 overflow-hidden">
-                <div class="flex space-x-12 animate-scroll w-max mono text-gray-500 font-bold text-xl items-center">
+                <div
+                    class="flex space-x-12 animate-scroll w-max mono text-gray-500 font-bold text-lg md:text-xl items-center">
                     <!-- Duplicated items for seamless scroll -->
                     <span>FLUTTER</span> <span class="text-blue-500">•</span>
                     <span>NODE.JS</span> <span class="text-blue-500">•</span>
@@ -347,11 +405,11 @@
             </div>
 
             <!-- About Section -->
-            <section class="py-32 container mx-auto px-6">
+            <section class="py-24 md:py-32 container mx-auto px-6">
                 <div class="grid md:grid-cols-2 gap-16 items-center">
                     <div class="about-img relative flex justify-center">
                         <div
-                            class="w-80 h-80 md:w-96 md:h-96 rounded-full overflow-hidden relative group profile-3d-shadow">
+                            class="w-64 h-64 md:w-96 md:h-96 rounded-full overflow-hidden relative group profile-3d-shadow">
                             <!-- Placeholder Avatar -->
                             <div
                                 class="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-emerald-500/10 z-10 mix-blend-overlay">
@@ -361,14 +419,14 @@
                         </div>
 
                         <!-- Floating Stat Card (Repositioned for Circle) -->
-                        <div class="absolute -bottom-4 right-10 md:right-20 glass p-4 rounded-xl border border-gray-700 shadow-2xl z-20 animate-bounce"
+                        <div class="absolute -bottom-4 right-4 md:right-20 glass p-3 md:p-4 rounded-xl border border-gray-700 shadow-2xl z-20 animate-bounce"
                             style="animation-duration: 3s;">
                             <div class="flex items-center gap-3">
                                 <div class="bg-blue-500/20 p-2 rounded-lg text-blue-400">
                                     <i data-lucide="code-2" class="w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <p class="text-2xl font-bold text-white leading-none">3+</p>
+                                    <p class="text-xl md:text-2xl font-bold text-white leading-none">3+</p>
                                     <p class="text-[10px] text-gray-400 uppercase tracking-wide font-bold">Years Exp.
                                     </p>
                                 </div>
@@ -376,7 +434,7 @@
                         </div>
                     </div>
 
-                    <div class="about-text flex flex-col justify-center h-full">
+                    <div class="about-text flex flex-col justify-center h-full text-center md:text-left">
                         <h2 class="text-3xl md:text-5xl font-bold mb-6 leading-tight">More than just <span
                                 class="text-blue-500">code</span>.</h2>
                         <p class="text-gray-400 mb-6 leading-relaxed text-lg">
@@ -392,12 +450,12 @@
 
                         <div class="grid grid-cols-2 gap-4">
                             <div
-                                class="p-4 bg-slate-800/50 rounded-lg border border-gray-800 hover:border-blue-500 transition group cursor-default">
+                                class="p-4 bg-slate-800/50 rounded-lg border border-gray-800 hover:border-blue-500 transition group cursor-default text-left">
                                 <h3 class="text-white font-bold mb-1 group-hover:text-blue-400 transition">Frontend</h3>
                                 <p class="text-sm text-gray-500">Flutter, Figma, UI/UX</p>
                             </div>
                             <div
-                                class="p-4 bg-slate-800/50 rounded-lg border border-gray-800 hover:border-emerald-500 transition group cursor-default">
+                                class="p-4 bg-slate-800/50 rounded-lg border border-gray-800 hover:border-emerald-500 transition group cursor-default text-left">
                                 <h3 class="text-white font-bold mb-1 group-hover:text-emerald-400 transition">Backend
                                 </h3>
                                 <p class="text-sm text-gray-500">Node.js, Mongo, SQL</p>
@@ -408,12 +466,12 @@
             </section>
 
             <!-- Featured Projects Preview -->
-            <section class="py-32 bg-slate-900/30 border-t border-slate-800">
+            <section class="py-24 md:py-32 bg-slate-900/30 border-t border-slate-800">
                 <div class="container mx-auto px-6">
                     <div class="flex justify-between items-end mb-16">
                         <div>
                             <p class="mono text-blue-400 mb-2 text-sm">SELECTED WORKS</p>
-                            <h2 class="text-4xl md:text-5xl font-bold">Featured Projects</h2>
+                            <h2 class="text-3xl md:text-5xl font-bold">Featured Projects</h2>
                         </div>
                         <button onclick="switchView('projects')"
                             class="hidden md:flex items-center gap-2 text-gray-400 hover:text-white transition group">
@@ -422,9 +480,9 @@
                         </button>
                     </div>
 
-                    <div class="space-y-32">
+                    <div class="space-y-24 md:space-y-32">
                         <!-- Project 1: Fg GlassPro -->
-                        <div class="group grid md:grid-cols-2 gap-12 items-center featured-project">
+                        <div class="group grid md:grid-cols-2 gap-8 md:gap-12 items-center featured-project">
                             <div class="order-2 md:order-1">
                                 <div class="mono text-blue-400 text-xs mb-4 flex items-center gap-2">
                                     <span class="w-2 h-2 rounded-full bg-blue-400"></span> ERP SOLUTION
@@ -453,7 +511,7 @@
                                     class="absolute inset-0 bg-blue-500/10 rounded-2xl transform rotate-3 group-hover:rotate-1 transition duration-500">
                                 </div>
                                 <div
-                                    class="h-64 md:h-80 bg-slate-800 rounded-2xl border border-gray-700 relative overflow-hidden shadow-2xl">
+                                    class="h-56 md:h-80 bg-slate-800 rounded-2xl border border-gray-700 relative overflow-hidden shadow-2xl">
                                     <div
                                         class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent z-10">
                                     </div>
@@ -466,13 +524,13 @@
                         </div>
 
                         <!-- Project 2: Future Tracker -->
-                        <div class="group grid md:grid-cols-2 gap-12 items-center featured-project">
+                        <div class="group grid md:grid-cols-2 gap-8 md:gap-12 items-center featured-project">
                             <div class="relative group cursor-pointer" onclick="switchView('projects')">
                                 <div
                                     class="absolute inset-0 bg-emerald-500/10 rounded-2xl transform -rotate-3 group-hover:-rotate-1 transition duration-500">
                                 </div>
                                 <div
-                                    class="h-64 md:h-80 bg-slate-800 rounded-2xl border border-gray-700 relative overflow-hidden shadow-2xl">
+                                    class="h-56 md:h-80 bg-slate-800 rounded-2xl border border-gray-700 relative overflow-hidden shadow-2xl">
                                     <div
                                         class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent z-10">
                                     </div>
@@ -505,6 +563,14 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Mobile only button to see all projects -->
+                    <div class="mt-16 text-center md:hidden">
+                        <button onclick="switchView('projects')"
+                            class="inline-flex items-center gap-2 px-6 py-3 bg-slate-800 rounded-full text-white font-bold hover:bg-slate-700 transition">
+                            View All Projects <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
                 </div>
             </section>
         </div>
@@ -512,34 +578,34 @@
         <!-- ======================= PROJECTS VIEW ======================= -->
         <div id="projects-view" class="view-section">
 
-            <header class="pt-32 pb-16 px-6 text-center container mx-auto">
+            <header class="pt-28 pb-12 px-6 text-center container mx-auto">
                 <button onclick="switchView('home')"
                     class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-white mb-8 transition">
                     <i data-lucide="arrow-left" class="w-4 h-4"></i> Back home
                 </button>
                 <h1 class="text-4xl md:text-6xl font-bold mb-6">The <span class="text-blue-400">Archive</span></h1>
-                <p class="text-gray-400 max-w-xl mx-auto mb-10">
+                <p class="text-gray-400 max-w-xl mx-auto mb-10 text-sm md:text-base">
                     A comprehensive collection of applications, prototypes, and web solutions I've engineered.
                 </p>
 
                 <!-- Filter Buttons -->
-                <div class="flex flex-wrap justify-center gap-4">
+                <div class="flex flex-wrap justify-center gap-3 md:gap-4">
                     <button onclick="filterProjects('all', this)"
-                        class="filter-btn active px-6 py-2 rounded-full border border-gray-700 text-sm font-bold transition hover:border-blue-400">All</button>
+                        class="filter-btn active px-4 md:px-6 py-2 rounded-full border border-gray-700 text-xs md:text-sm font-bold transition hover:border-blue-400">All</button>
                     <button onclick="filterProjects('application', this)"
-                        class="filter-btn px-6 py-2 rounded-full border border-gray-700 text-sm font-bold transition hover:border-blue-400">Applications</button>
+                        class="filter-btn px-4 md:px-6 py-2 rounded-full border border-gray-700 text-xs md:text-sm font-bold transition hover:border-blue-400">Applications</button>
                     <button onclick="filterProjects('design', this)"
-                        class="filter-btn px-6 py-2 rounded-full border border-gray-700 text-sm font-bold transition hover:border-blue-400">Mobile
+                        class="filter-btn px-4 md:px-6 py-2 rounded-full border border-gray-700 text-xs md:text-sm font-bold transition hover:border-blue-400">Mobile
                         Designs</button>
                     <button onclick="filterProjects('web', this)"
-                        class="filter-btn px-6 py-2 rounded-full border border-gray-700 text-sm font-bold transition hover:border-blue-400">Web
+                        class="filter-btn px-4 md:px-6 py-2 rounded-full border border-gray-700 text-xs md:text-sm font-bold transition hover:border-blue-400">Web
                         Dev</button>
                 </div>
             </header>
 
             <!-- Project Grid -->
             <section class="container mx-auto px-6 pb-32">
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="project-grid-container">
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" id="project-grid-container">
                     <!-- Javascript will populate this -->
                 </div>
             </section>
@@ -548,30 +614,30 @@
 
         <!-- ======================= RESUME VIEW (NEW) ======================= -->
         <div id="resume-view" class="view-section">
-            <div class="pt-32 pb-16 container mx-auto px-6 max-w-4xl">
+            <div class="pt-28 pb-16 container mx-auto px-6 max-w-4xl">
 
                 <!-- Resume Header -->
                 <div
-                    class="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 border-b border-gray-800 pb-8 resume-anim opacity-0 translate-y-4">
-                    <div>
-                        <h1 class="text-5xl font-bold mb-2">Yash Kushwaha</h1>
-                        <p class="text-xl text-blue-400 mb-4">Full-Stack Mobile Application Developer</p>
-                        <div class="flex flex-wrap gap-4 text-sm text-gray-400">
-                            <span class="flex items-center gap-1"><i data-lucide="map-pin" class="w-4 h-4"></i> Vapi,
+                    class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 md:mb-16 border-b border-gray-800 pb-8 resume-anim opacity-0 translate-y-4">
+                    <div class="mb-6 md:mb-0">
+                        <h1 class="text-4xl md:text-5xl font-bold mb-2">Yash Kushwaha</h1>
+                        <p class="text-lg md:text-xl text-blue-400 mb-4">Full-Stack Mobile Application Developer</p>
+                        <div class="flex flex-col md:flex-row md:flex-wrap gap-2 md:gap-4 text-sm text-gray-400">
+                            <span class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4"></i> Vapi,
                                 Gujarat</span>
-                            <span class="flex items-center gap-1"><i data-lucide="phone" class="w-4 h-4"></i> +91
+                            <span class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4"></i> +91
                                 7990714432</span>
-                            <span class="flex items-center gap-1"><i data-lucide="mail" class="w-4 h-4"></i>
+                            <span class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4"></i>
                                 Yashkushwaha65@gmail.com</span>
                         </div>
                     </div>
                 </div>
                 <!-- Professional Summary -->
-                <section class="mb-16 resume-anim opacity-0 translate-y-4">
+                <section class="mb-12 md:mb-16 resume-anim opacity-0 translate-y-4">
                     <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
                         <span class="w-8 h-1 bg-blue-500 rounded-full"></span> Professional Summary
                     </h2>
-                    <p class="text-gray-300 leading-relaxed text-lg">
+                    <p class="text-gray-300 leading-relaxed text-base md:text-lg">
                         Innovative Software Engineer with over 3 years of experience in cross-platform mobile
                         application development. Specialist in building scalable, high-performance applications using
                         <span class="text-white font-semibold">Flutter</span> for the frontend and <span
@@ -582,11 +648,11 @@
                 </section>
 
                 <!-- Technical Skills -->
-                <section class="mb-16 resume-anim opacity-0 translate-y-4">
+                <section class="mb-12 md:mb-16 resume-anim opacity-0 translate-y-4">
                     <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-2">
                         <span class="w-8 h-1 bg-blue-500 rounded-full"></span> Technical Skills
                     </h2>
-                    <div class="grid md:grid-cols-2 gap-6">
+                    <div class="grid md:grid-cols-2 gap-4 md:gap-6">
                         <!-- Skill Item -->
                         <div class="bg-slate-900/50 p-4 rounded-xl border border-gray-800">
                             <div class="flex justify-between mb-2">
@@ -632,7 +698,7 @@
                 </section>
 
                 <!-- Experience Timeline -->
-                <section class="mb-16 relative resume-anim opacity-0 translate-y-4">
+                <section class="mb-12 md:mb-16 relative resume-anim opacity-0 translate-y-4">
                     <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-2">
                         <span class="w-8 h-1 bg-blue-500 rounded-full"></span> Professional Experience
                     </h2>
@@ -640,12 +706,17 @@
                     <div class="relative pl-8 md:pl-0">
                         <!-- Vertical Line -->
                         <div class="timeline-line hidden md:block"></div>
+                        <!-- Mobile Vertical Line -->
+                        <div class="absolute left-0 top-0 bottom-0 w-[2px] bg-gray-800 md:hidden ml-2"></div>
 
                         <!-- Job 1 -->
                         <div class="relative md:w-1/2 md:ml-auto md:pl-10 pb-12 group">
                             <!-- Dot -->
                             <div
                                 class="absolute left-[-9px] top-1 w-5 h-5 bg-blue-500 rounded-full border-4 border-slate-900 z-10 hidden md:block">
+                            </div>
+                            <!-- Mobile Dot -->
+                            <div class="absolute left-[-2px] top-1 w-3 h-3 bg-blue-500 rounded-full z-10 md:hidden">
                             </div>
 
                             <div
@@ -668,6 +739,9 @@
                             <div
                                 class="absolute right-[-11px] top-1 w-5 h-5 bg-gray-600 rounded-full border-4 border-slate-900 z-10 hidden md:block">
                             </div>
+                            <!-- Mobile Dot -->
+                            <div class="absolute left-[-2px] top-1 w-3 h-3 bg-gray-600 rounded-full z-10 md:hidden">
+                            </div>
 
                             <div
                                 class="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 hover:border-gray-500/50 transition duration-300">
@@ -686,7 +760,7 @@
                 </section>
 
                 <!-- Key Projects Resume Section -->
-                <section class="mb-16 resume-anim opacity-0 translate-y-4">
+                <section class="mb-12 md:mb-16 resume-anim opacity-0 translate-y-4">
                     <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-2">
                         <span class="w-8 h-1 bg-blue-500 rounded-full"></span> Key Projects
                     </h2>
@@ -715,7 +789,7 @@
                     </div>
                 </section>
                 <!-- Extra Activities Section (NEW) -->
-                <section class="mb-16 resume-anim opacity-0 translate-y-4">
+                <section class="mb-12 md:mb-16 resume-anim opacity-0 translate-y-4">
                     <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-2">
                         <span class="w-8 h-1 bg-blue-500 rounded-full"></span> Extra Activities
                     </h2>
@@ -773,7 +847,7 @@
                             </div>
                         </div>
                     </div>
-                    <div>
+                    <div class="mt-8 md:mt-0">
                         <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
                             <span class="w-8 h-1 bg-blue-500 rounded-full"></span> Certifications
                         </h2>
@@ -800,7 +874,7 @@
 
             </div>
             <!-- DEDICATED DOWNLOAD SECTION (NEW) -->
-            <div class="resume-anim opacity-0 translate-y-4 mb-16">
+            <div class="resume-anim opacity-0 translate-y-4 mb-16 container mx-auto px-6 max-w-4xl">
                 <div
                     class="bg-gradient-to-r from-blue-900/40 to-slate-900/40 border border-blue-500/30 rounded-2xl p-8 text-center relative overflow-hidden group">
                     <div class="absolute inset-0 bg-blue-500/5 group-hover:bg-blue-500/10 transition duration-500">
@@ -824,7 +898,7 @@
         <div class="container mx-auto px-6">
             <h2 class="text-2xl font-bold mb-8 text-white">Ready to collaborate?</h2>
             <a href="mailto:Yashkushwaha65@gmail.com"
-                class="text-3xl md:text-4xl font-bold text-blue-400 hover:text-white transition duration-300">
+                class="text-2xl md:text-4xl font-bold text-blue-400 hover:text-white transition duration-300 break-words">
                 Yashkushwaha65@gmail.com
             </a>
 
@@ -853,6 +927,34 @@
     <script>
         // Initialize Icons
         lucide.createIcons();
+
+        // --- MOBILE MENU LOGIC ---
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const isOpen = menu.classList.contains('open');
+
+            if (isOpen) {
+                // Close menu
+                menu.classList.remove('open');
+                menu.classList.remove('translate-x-0');
+                menu.classList.add('translate-x-full');
+                document.body.style.overflow = ''; // Restore scrolling
+            } else {
+                // Open menu
+                menu.classList.add('open');
+                menu.classList.remove('translate-x-full');
+                menu.classList.add('translate-x-0');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            }
+        }
+
+        function mobileNavigate(viewName) {
+            toggleMobileMenu();
+            // Small delay to allow menu to close before switching view
+            setTimeout(() => {
+                switchView(viewName);
+            }, 300);
+        }
 
         // --- EASTER EGG LOGIC ---
         let logoClicks = 0;
@@ -950,7 +1052,7 @@
 
                 // Persistent Notification
                 const toast = document.createElement('div');
-                toast.className = 'fixed top-24 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-slate-900 px-6 py-3 rounded-full font-bold z-50 shadow-2xl animate-bounce border-2 border-yellow-300';
+                toast.className = 'fixed top-24 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-slate-900 px-6 py-3 rounded-full font-bold z-50 shadow-2xl animate-bounce border-2 border-yellow-300 w-max max-w-[90vw] text-center text-sm md:text-base';
                 toast.innerHTML = '☕ HYPER-CAFFEINATED MODE ACTIVE ☕';
                 document.body.appendChild(toast);
 
@@ -999,7 +1101,7 @@
             {
                 title: "Fg GlassPro",
                 category: ["application"],
-                image: "https://placehold.co/600x400/1e293b/3b82f6?text=Fg+GlassPro", // Placeholder Image - Replace with your project image path
+                image: "https://placehold.co/600x400/1e293b/3b82f6?text=Fg+GlassPro",
                 desc: "ERP solution tailored for the glass industry. Features order tracking, customer management, digital invoicing. Streamlined operations for SMEs and reduced manual paperwork.",
                 tags: ["Flutter", "Firebase", "MongoDB"],
                 color: "blue"
@@ -1007,7 +1109,7 @@
             {
                 title: "Future Tracker",
                 category: ["application"],
-                image: "https://placehold.co/600x400/1e293b/10b981?text=Future+Tracker", // Placeholder Image
+                image: "https://placehold.co/600x400/1e293b/10b981?text=Future+Tracker",
                 desc: "Productivity and business tracking app. Features project monitoring, sales tracking, and reporting dashboards. Improved team accountability and efficiency.",
                 tags: ["Flutter", "Node.js", "Firebase"],
                 color: "emerald"
@@ -1015,7 +1117,7 @@
             {
                 title: "Convex",
                 category: ["application"],
-                image: "https://placehold.co/600x400/1e293b/a855f7?text=Convex", // Placeholder Image
+                image: "https://placehold.co/600x400/1e293b/a855f7?text=Convex",
                 desc: "Business analytics and reporting tool. Features live dashboards and predictive insights. Helped businesses make data-driven decisions with real-time visibility.",
                 tags: ["Flutter", "REST API", "Analytics"],
                 color: "purple"
@@ -1023,7 +1125,7 @@
             {
                 title: "Productivity App",
                 category: ["application"],
-                image: "https://placehold.co/600x400/1e293b/f97316?text=Productivity+App", // Placeholder Image
+                image: "https://placehold.co/600x400/1e293b/f97316?text=Productivity+App",
                 desc: "Task and schedule management for teams. Features collaboration boards and reminders. Enhanced team collaboration and reduced missed deadlines.",
                 tags: ["Flutter", "Provider", "FCM"],
                 color: "orange"
@@ -1033,7 +1135,7 @@
             {
                 title: "Edu-Point",
                 category: ["design"],
-                image: "https://placehold.co/600x400/1e293b/ec4899?text=Edu-Point", // Placeholder Image
+                image: "https://placehold.co/600x400/1e293b/ec4899?text=Edu-Point",
                 desc: "Community learning app prototype. Features student-teacher interaction and course management. Designed to foster interactive learning environments.",
                 tags: ["Figma", "UI/UX", "Education"],
                 color: "pink"
@@ -1041,7 +1143,7 @@
             {
                 title: "Fundo",
                 category: ["design"],
-                image: "https://placehold.co/600x400/1e293b/eab308?text=Fundo", // Placeholder Image
+                image: "https://placehold.co/600x400/1e293b/eab308?text=Fundo",
                 desc: "Finance management app design. Features expense tracking and budgeting tools. Simplified personal finance management concepts for users.",
                 tags: ["Figma", "Flutter", "Finance"],
                 color: "yellow"
@@ -1049,7 +1151,7 @@
             {
                 title: "DSM.",
                 category: ["design"],
-                image: "https://placehold.co/600x400/1e293b/06b6d4?text=DSM.", // Placeholder Image
+                image: "https://placehold.co/600x400/1e293b/06b6d4?text=DSM.",
                 desc: "Digital service management prototype. Features workflow automation and task assignment. Conceptualized for businesses to manage digital services efficiently.",
                 tags: ["Figma", "Workflow", "B2B"],
                 color: "cyan"
@@ -1057,7 +1159,7 @@
             {
                 title: "Creative Concept",
                 category: ["design"],
-                image: "https://placehold.co/600x400/1e293b/6366f1?text=Creative+Concept", // Placeholder Image
+                image: "https://placehold.co/600x400/1e293b/6366f1?text=Creative+Concept",
                 desc: "Modern UI concept for networking and sharing. Features sleek design elements and intuitive navigation. Showcased innovative UI/UX approaches.",
                 tags: ["Figma", "UI/UX", "Social"],
                 color: "indigo"
@@ -1067,7 +1169,7 @@
             {
                 title: "Reporting Dashboard",
                 category: ["web"],
-                image: "https://placehold.co/600x400/1e293b/ef4444?text=Reporting+Dashboard", // Placeholder Image
+                image: "https://placehold.co/600x400/1e293b/ef4444?text=Reporting+Dashboard",
                 desc: "Web-based reporting and summary dashboards. Features responsive design, interactive charts, and secure login. Provided businesses with accessible tools.",
                 tags: ["HTML", "JS", "Firebase"],
                 color: "red"
@@ -1075,7 +1177,7 @@
             {
                 title: "Portfolio Website",
                 category: ["web"],
-                image: "https://placehold.co/600x400/1e293b/14b8a6?text=Portfolio+Website", // Placeholder Image
+                image: "https://placehold.co/600x400/1e293b/14b8a6?text=Portfolio+Website",
                 desc: "Personal portfolio showcasing apps and designs. Features clean UI, responsive layout, and optimized performance. Enhanced professional branding.",
                 tags: ["HTML", "CSS", "JS"],
                 color: "teal"
@@ -1087,8 +1189,8 @@
 
         function renderProjects() {
             gridContainer.innerHTML = projects.map((p, index) => `
-                <div class="project-card ${p.category.join(' ')} bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-${p.color}-500/50 transition duration-300 group opacity-0 translate-y-4">
-                    <div class="h-48 bg-slate-800 relative overflow-hidden">
+                <div class="project-card ${p.category.join(' ')} bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-${p.color}-500/50 transition duration-300 group opacity-0 translate-y-4 flex flex-col h-full">
+                    <div class="h-48 bg-slate-800 relative overflow-hidden flex-shrink-0">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent z-10"></div>
                         
                         ${p.image ?
@@ -1098,13 +1200,13 @@
                         </div>`}
                         
                     </div>
-                    <div class="p-6">
+                    <div class="p-6 flex flex-col flex-grow">
                         <div class="flex justify-between items-start mb-4">
                             <h3 class="text-xl font-bold text-white">${p.title}</h3>
-                            <span class="px-2 py-1 bg-${p.color}-500/10 text-${p.color}-400 text-xs rounded border border-${p.color}-500/20 uppercase">${p.category[0]}</span>
+                            <span class="px-2 py-1 bg-${p.color}-500/10 text-${p.color}-400 text-xs rounded border border-${p.color}-500/20 uppercase flex-shrink-0 ml-2">${p.category[0]}</span>
                         </div>
-                        <p class="text-gray-400 text-sm mb-6 line-clamp-4 leading-relaxed">${p.desc}</p>
-                        <div class="flex gap-2 text-xs text-gray-500 mono flex-wrap">
+                        <p class="text-gray-400 text-sm mb-6 line-clamp-4 leading-relaxed flex-grow">${p.desc}</p>
+                        <div class="flex gap-2 text-xs text-gray-500 mono flex-wrap mt-auto">
                             ${p.tags.map(t => `<span>#${t}</span>`).join('')}
                         </div>
                     </div>
@@ -1189,7 +1291,7 @@
                 const shouldShow = category === 'all' || card.classList.contains(category);
 
                 if (shouldShow) {
-                    card.style.display = 'block';
+                    card.style.display = 'flex'; // Changed from block to flex because of the class changes above
                     gsap.to(card, { opacity: 1, scale: 1, duration: 0.4 });
                 } else {
                     gsap.to(card, {
