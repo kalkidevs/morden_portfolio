@@ -165,13 +165,13 @@ morden_portfolio/
 <div align="center">
 
 ### Desktop View
-![Desktop View Placeholder](https://via.placeholder.com/800x450/0891b2/ffffff?text=Desktop+View)
+![Desktop View Placeholder](/assets/images/profile_view.png)
 
 ### Mobile View
 ![Mobile View Placeholder](https://via.placeholder.com/400x600/0891b2/ffffff?text=Mobile+View)
 
 ### Easter Egg: Developer Mode ☕
-![Easter Egg Placeholder](https://via.placeholder.com/800x450/0891b2/ffffff?text=Coffee+Rain+Animation)
+![Easter Egg Placeholder](/assets/images/dev_mode.png)
 
 </div>
 
@@ -230,7 +230,7 @@ It helps others discover the project and motivates me to add more features.
 
 **Yash Kushwaha**
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/yashkushwaha)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/yashkushwaha333)
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/kalkidevs)
 [![Email](https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:Yashkushwaha65@gmail.com)
 

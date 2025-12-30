@@ -194,6 +194,27 @@
                 transform: translateY(-20px) scale(0.5);
             }
         }
+
+        /* 3D Profile Shadow */
+        .profile-3d-shadow {
+            box-shadow:
+                -20px -20px 60px #0f172a,
+                /* Dark shadow top-left */
+                20px 20px 60px #1e293b,
+                /* Lighter shadow bottom-right */
+                0 0 0 4px rgba(59, 130, 246, 0.3);
+            /* Subtle blue ring */
+            transition: all 0.5s ease;
+        }
+
+        .profile-3d-shadow:hover {
+            box-shadow:
+                -10px -10px 30px #0f172a,
+                10px 10px 30px #1e293b,
+                0 0 0 8px rgba(59, 130, 246, 0.6);
+            /* Glow intensifies */
+            transform: scale(1.02);
+        }
     </style>
 </head>
 
@@ -227,7 +248,7 @@
                 <button onclick="switchView('resume')" class="hover:text-white transition text-blue-400">Resume</button>
                 <a href="#contact" class="hover:text-white transition">Contact</a>
 
-                <a href="path/to/Yash_Kushwaha_Resume.pdf" target="_blank"
+                <a href="/assets/YashKushwaha_Resume.pdf" target="_blank"
                     class="px-5 py-2 rounded-full border border-gray-600 hover:border-blue-400 hover:bg-blue-500/10 hover:text-white transition duration-300 flex items-center gap-2">
                     <i data-lucide="download" class="w-4 h-4"></i> PDF
                 </a>
@@ -328,34 +349,36 @@
             <!-- About Section -->
             <section class="py-32 container mx-auto px-6">
                 <div class="grid md:grid-cols-2 gap-16 items-center">
-                    <div class="about-img relative">
+                    <div class="about-img relative flex justify-center">
                         <div
-                            class="w-full h-96 bg-slate-800 rounded-2xl overflow-hidden relative group border border-gray-700">
+                            class="w-80 h-80 md:w-96 md:h-96 rounded-full overflow-hidden relative group profile-3d-shadow">
                             <!-- Placeholder Avatar -->
                             <div
-                                class="absolute inset-0 bg-gradient-to-tr from-blue-600/20 to-emerald-500/20 z-10 mix-blend-overlay">
+                                class="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-emerald-500/10 z-10 mix-blend-overlay">
                             </div>
-                            <img src="https://ui-avatars.com/api/?name=Yash+K&background=0f172a&color=3b82f6&size=512&font-size=0.33"
-                                alt="Yash"
-                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-700">
+                            <img src="assets/images/profile.png" alt="Yash"
+                                class="w-full h-full object-cover transition duration-700">
                         </div>
-                        <!-- Stat Card -->
-                        <div
-                            class="absolute -bottom-6 -right-6 glass p-6 rounded-xl border border-gray-700 shadow-2xl z-20">
+
+                        <!-- Floating Stat Card (Repositioned for Circle) -->
+                        <div class="absolute -bottom-4 right-10 md:right-20 glass p-4 rounded-xl border border-gray-700 shadow-2xl z-20 animate-bounce"
+                            style="animation-duration: 3s;">
                             <div class="flex items-center gap-3">
-                                <div class="bg-blue-500/20 p-3 rounded-lg text-blue-400">
-                                    <i data-lucide="code-2"></i>
+                                <div class="bg-blue-500/20 p-2 rounded-lg text-blue-400">
+                                    <i data-lucide="code-2" class="w-5 h-5"></i>
                                 </div>
                                 <div>
-                                    <p class="text-3xl font-bold text-white">3+</p>
-                                    <p class="text-xs text-gray-400 uppercase tracking-wide">Years Exp.</p>
+                                    <p class="text-2xl font-bold text-white leading-none">3+</p>
+                                    <p class="text-[10px] text-gray-400 uppercase tracking-wide font-bold">Years Exp.
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="about-text">
-                        <h2 class="text-3xl md:text-5xl font-bold mb-6">More than just code.</h2>
+                    <div class="about-text flex flex-col justify-center h-full">
+                        <h2 class="text-3xl md:text-5xl font-bold mb-6 leading-tight">More than just <span
+                                class="text-blue-500">code</span>.</h2>
                         <p class="text-gray-400 mb-6 leading-relaxed text-lg">
                             I am a software engineer based in <span class="text-white font-semibold">Vapi,
                                 Gujarat</span>. My expertise lies in building high-performance mobile applications that
@@ -369,12 +392,12 @@
 
                         <div class="grid grid-cols-2 gap-4">
                             <div
-                                class="p-4 bg-slate-800/50 rounded-lg border border-gray-800 hover:border-blue-500 transition group">
+                                class="p-4 bg-slate-800/50 rounded-lg border border-gray-800 hover:border-blue-500 transition group cursor-default">
                                 <h3 class="text-white font-bold mb-1 group-hover:text-blue-400 transition">Frontend</h3>
                                 <p class="text-sm text-gray-500">Flutter, Figma, UI/UX</p>
                             </div>
                             <div
-                                class="p-4 bg-slate-800/50 rounded-lg border border-gray-800 hover:border-emerald-500 transition group">
+                                class="p-4 bg-slate-800/50 rounded-lg border border-gray-800 hover:border-emerald-500 transition group cursor-default">
                                 <h3 class="text-white font-bold mb-1 group-hover:text-emerald-400 transition">Backend
                                 </h3>
                                 <p class="text-sm text-gray-500">Node.js, Mongo, SQL</p>
@@ -786,8 +809,8 @@
                     <h3 class="text-2xl font-bold text-white mb-2">Looking for the full PDF?</h3>
                     <p class="text-gray-400 mb-6 max-w-lg mx-auto">Download my complete resume to view detailed
                         project breakdowns, additional certifications, and academic history.</p>
-                    <a href="path/to/Yash_Kushwaha_Resume.pdf" target="_blank"
-                        class="inline-flex items-center gap-2 px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-bold transition shadow-lg shadow-blue-500/25 hover:scale-105">
+                    <a href="/assets/YashKushwaha_Resume.pdf" download="YashKushwaha_Resume.pdf" target="_blank"
+                        class="inline-flex items-center gap-2 px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-bold transition shadow-lg shadow-blue-500/25 hover:scale-105 cursor-pointer z-10 relative">
                         <i data-lucide="download" class="w-5 h-5"></i> Download Resume.pdf
                     </a>
                 </div>
@@ -976,6 +999,7 @@
             {
                 title: "Fg GlassPro",
                 category: ["application"],
+                image: "https://placehold.co/600x400/1e293b/3b82f6?text=Fg+GlassPro", // Placeholder Image - Replace with your project image path
                 desc: "ERP solution tailored for the glass industry. Features order tracking, customer management, digital invoicing. Streamlined operations for SMEs and reduced manual paperwork.",
                 tags: ["Flutter", "Firebase", "MongoDB"],
                 color: "blue"
@@ -983,6 +1007,7 @@
             {
                 title: "Future Tracker",
                 category: ["application"],
+                image: "https://placehold.co/600x400/1e293b/10b981?text=Future+Tracker", // Placeholder Image
                 desc: "Productivity and business tracking app. Features project monitoring, sales tracking, and reporting dashboards. Improved team accountability and efficiency.",
                 tags: ["Flutter", "Node.js", "Firebase"],
                 color: "emerald"
@@ -990,6 +1015,7 @@
             {
                 title: "Convex",
                 category: ["application"],
+                image: "https://placehold.co/600x400/1e293b/a855f7?text=Convex", // Placeholder Image
                 desc: "Business analytics and reporting tool. Features live dashboards and predictive insights. Helped businesses make data-driven decisions with real-time visibility.",
                 tags: ["Flutter", "REST API", "Analytics"],
                 color: "purple"
@@ -997,6 +1023,7 @@
             {
                 title: "Productivity App",
                 category: ["application"],
+                image: "https://placehold.co/600x400/1e293b/f97316?text=Productivity+App", // Placeholder Image
                 desc: "Task and schedule management for teams. Features collaboration boards and reminders. Enhanced team collaboration and reduced missed deadlines.",
                 tags: ["Flutter", "Provider", "FCM"],
                 color: "orange"
@@ -1006,6 +1033,7 @@
             {
                 title: "Edu-Point",
                 category: ["design"],
+                image: "https://placehold.co/600x400/1e293b/ec4899?text=Edu-Point", // Placeholder Image
                 desc: "Community learning app prototype. Features student-teacher interaction and course management. Designed to foster interactive learning environments.",
                 tags: ["Figma", "UI/UX", "Education"],
                 color: "pink"
@@ -1013,6 +1041,7 @@
             {
                 title: "Fundo",
                 category: ["design"],
+                image: "https://placehold.co/600x400/1e293b/eab308?text=Fundo", // Placeholder Image
                 desc: "Finance management app design. Features expense tracking and budgeting tools. Simplified personal finance management concepts for users.",
                 tags: ["Figma", "Flutter", "Finance"],
                 color: "yellow"
@@ -1020,6 +1049,7 @@
             {
                 title: "DSM.",
                 category: ["design"],
+                image: "https://placehold.co/600x400/1e293b/06b6d4?text=DSM.", // Placeholder Image
                 desc: "Digital service management prototype. Features workflow automation and task assignment. Conceptualized for businesses to manage digital services efficiently.",
                 tags: ["Figma", "Workflow", "B2B"],
                 color: "cyan"
@@ -1027,6 +1057,7 @@
             {
                 title: "Creative Concept",
                 category: ["design"],
+                image: "https://placehold.co/600x400/1e293b/6366f1?text=Creative+Concept", // Placeholder Image
                 desc: "Modern UI concept for networking and sharing. Features sleek design elements and intuitive navigation. Showcased innovative UI/UX approaches.",
                 tags: ["Figma", "UI/UX", "Social"],
                 color: "indigo"
@@ -1036,6 +1067,7 @@
             {
                 title: "Reporting Dashboard",
                 category: ["web"],
+                image: "https://placehold.co/600x400/1e293b/ef4444?text=Reporting+Dashboard", // Placeholder Image
                 desc: "Web-based reporting and summary dashboards. Features responsive design, interactive charts, and secure login. Provided businesses with accessible tools.",
                 tags: ["HTML", "JS", "Firebase"],
                 color: "red"
@@ -1043,6 +1075,7 @@
             {
                 title: "Portfolio Website",
                 category: ["web"],
+                image: "https://placehold.co/600x400/1e293b/14b8a6?text=Portfolio+Website", // Placeholder Image
                 desc: "Personal portfolio showcasing apps and designs. Features clean UI, responsive layout, and optimized performance. Enhanced professional branding.",
                 tags: ["HTML", "CSS", "JS"],
                 color: "teal"
@@ -1057,9 +1090,13 @@
                 <div class="project-card ${p.category.join(' ')} bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-${p.color}-500/50 transition duration-300 group opacity-0 translate-y-4">
                     <div class="h-48 bg-slate-800 relative overflow-hidden">
                         <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent z-10"></div>
-                        <div class="w-full h-full bg-slate-800 flex items-center justify-center text-slate-700 font-bold group-hover:scale-105 transition duration-500">
+                        
+                        ${p.image ?
+                    `<img src="${p.image}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">` :
+                    `<div class="w-full h-full bg-slate-800 flex items-center justify-center text-slate-700 font-bold group-hover:scale-105 transition duration-500">
                             ${p.title.toUpperCase()}
-                        </div>
+                        </div>`}
+                        
                     </div>
                     <div class="p-6">
                         <div class="flex justify-between items-start mb-4">
